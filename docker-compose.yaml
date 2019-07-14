@@ -11,7 +11,26 @@ services:
       - DB_NAME=user
       - JWT_SECRET=_JWT_SECR_KEY_
     ports:
-      - 80:3000
+      - 3000:3000
+    command: 
+      - /bin/bash
+      - -c
+      - |
+        npm install yarn -g
+        yarn install
+        yarn dev
+  article:
+    image: node:10.15.3
+    volumes:
+      - ./services/article/:/app
+    working_dir: /app
+    environment:
+      - PORT=3000
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=article
+      - JWT_SECRET=_JWT_SECR_KEY_
+    ports:
+      - 3001:3000
     command: 
       - /bin/bash
       - -c
