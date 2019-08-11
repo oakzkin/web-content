@@ -19,7 +19,7 @@ app.engine('html', (filePath, options, callback) => { // define the template eng
 
     let rendered = content.toString()
     for (let key in options.data || {}) {
-      rendered = rendered.replace('{{' + key + '}}', options.data[key])
+      rendered = rendered.replace('{{ ' + key + ' }}', options.data[key])
     }
 
 
@@ -89,6 +89,14 @@ app.get('/:id', (req, res) => {
     })
   
 })
+
+app.post('/login' , (req, res) => {
+  const body = req.body
+  const username = body.username
+  const password = body.password
+  console.log('from input', username, password)
+  res.json({}) 
+ })
 
 
 
