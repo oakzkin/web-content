@@ -63,9 +63,9 @@ services:
     working_dir: /app
     environment:
       - PORT=3000
-      - ARTICLE_API_PATH=http://article
+      - ARTICLE_API_PATH=http://article:3001
       - JWT_SECRET=_JWT_SECR_KEY_
-      - USER_API_PATH=http://user
+      - USER_API_PATH=http://user:3000
     ports:
       - 8080:3000
     command: 

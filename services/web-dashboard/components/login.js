@@ -1,6 +1,9 @@
 import React , { useState } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { onLogin } from '../store'
 
 
 const Wrapper = styled.div`
@@ -48,7 +51,7 @@ const Button = styled.button`
     background-color: #25d47a;
   }
 `
-export default () => {
+const LoginModal = (props) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -61,7 +64,10 @@ export default () => {
   }
 
   const handleLogin = () => {
-    console.log(username, password)
+    //request
+    props.login(username, password)
+
+    
   }
 
   return (
@@ -69,6 +75,10 @@ export default () => {
       <Container>
         <InnerWrapper>
           <Head>SignIn</Head>
+          <p>jwt: {props.jwt}</p>
+          {
+            props.loginError ? (<p>{props.loginError}</p>) : null
+          }
           <InputText value={username} onChange={handleUsernameChange} placeholder="Username"/>
           <InputText value={password} onChange={handlePasswordChange} type="password" placeholder="Password"/>
           <Button onClick={handleLogin} >Login</Button>
@@ -77,3 +87,16 @@ export default () => {
     </Wrapper>
   )
 }
+
+const mapStoreToProps = store => {
+  return {
+    jwt: store.jwt,
+    loginError: store.loginError
+  }
+}
+
+const mapActionToProps = {
+  login: onLogin
+}
+
+export default connect(mapStoreToProps, mapActionToProps)(LoginModal)
