@@ -15,8 +15,9 @@ export default (req, res) => {
         error: response.data.message
       })
     }
-    console.log(response.status, response.data)
+    //console.log(response.status, response.data)
     res.status(200).json({
+      status: true,
       jwt: response.data.token
     })
   })

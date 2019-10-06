@@ -1,5 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
+import Cookies from 'js-cookie'
+import { onJwtRecieved } from '../store'
 
 export default class MyDocument extends Document {
   static async getInitialProps (ctx) {
@@ -14,6 +16,8 @@ export default class MyDocument extends Document {
 
       const initialProps = await Document.getInitialProps(ctx)
       
+      
+
       return {
         ...initialProps,
         styles: (

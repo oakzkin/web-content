@@ -1,102 +1,139 @@
-import React , { useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Cookies from 'js-cookie'
 
-import { onLogin } from '../store'
 
+import { onLogin, onLogout, onJwtReceived } from '../store'
 
 const Wrapper = styled.div`
-  width: 100%;
-  max-width: 500px;
-`
-const Container = styled.div`
-  margin: 20px;
-  border: 1px #ccc solid;
-  border-radius: 5px;
-`
-const InnerWrapper = styled.div`
-  padding: 20px;
+	width: 100%;
+	max-width: 500px;
 `
 
+const Container = styled.div`
+	margin: 20px;
+	border: 1px #ccc solid;
+	border-radius: 5px;
+`
+
+const InnerWrapper = styled.div`
+	padding: 20px;
+`
+
+
 const Head = styled.h1`
-  font-size: 30px;
-  text-align: center;
-  font-family: ${props => props.theme.font.family};
+	font-size: 31px;
+	text-align: center;
+	font-family: ${props => props.theme.font.family};
 `
 
 const InputText = styled.input`
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 15px;
-  font-size: 18px;
-  border-radius: 5px;
-  border: 1px #ccc solid;
-  margin-bottom: 15px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	font-size: 21px;
+	border-radius: 5px;
+	box-shadow: none;
+	border: solid 1px #ccc;
+	margin-bottom: 24px;
 `
 
 const Button = styled.button`
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 15px;
-  font-size: 18px;
-  text-align: center;
-  font-family: ${props => props.theme.font.family};
-  background-color: #157544;
-  color: white;
-  border-radius: 5px;
-  border: 1px #ccc solid;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 10px 15px;
+	font-size: 18px;
+	background-color: #1f82a1;
+	color: white;
+	border-radius: 5px;
 
-  &:hover {
-    background-color: #25d47a;
-  }
+	&:hover {
+		background-color: #196982;
+	}
 `
+
+
 const LoginModal = (props) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value)
+  if(!  props.jwt){
+    const token = Cookies.get('jwt')
+    if (token) {
+      props.setJwt(token)
+    }
   }
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value)
+	const [username, setUsername] = useState(props.username || '')
+	const [password, setPassword] = useState('')
+	const [error, setError] = useState('')
+
+
+	const handleUsernameChange = (e) => { 
+		setUsername(e.target.value) 
+	}
+	const handlePasswordChange = (e) => {
+		setPassword(e.target.value)
+	}
+	const handleLogin = () => {
+		// request
+		props.login(username, password, (response) => {
+			//console.log(response)
+      if (!response.data.status) setError(response.data.error)
+      else setError('')
+		})
+  }
+  
+  const handleLogout = () => {
+		// request
+		props.logout()
   }
 
-  const handleLogin = () => {
-    //request
-    props.login(username, password)
 
-    
-  }
-
-  return (
-    <Wrapper>
-      <Container>
-        <InnerWrapper>
-          <Head>SignIn</Head>
-          <p>jwt: {props.jwt}</p>
-          {
-            props.loginError ? (<p>{props.loginError}</p>) : null
-          }
-          <InputText value={username} onChange={handleUsernameChange} placeholder="Username"/>
-          <InputText value={password} onChange={handlePasswordChange} type="password" placeholder="Password"/>
-          <Button onClick={handleLogin} >Login</Button>
-        </InnerWrapper>
-      </Container>
-    </Wrapper>
+  const getLoginBox = () => (
+    <InnerWrapper>
+        <Head>Sign In</Head>
+        <p>jwt: {props.jwt}</p>
+        {
+          error 
+            ? (<p>{error}</p>) 
+            : null
+        }
+        <InputText value={username} onChange={handleUsernameChange} placeholder="Username" />
+        <InputText value={password} onChange={handlePasswordChange} type="password" placeholder="Password" />
+        <Button onClick={handleLogin} >Login</Button>
+    </InnerWrapper>
   )
+
+
+  const getLogoutBox = () => (
+    <InnerWrapper>
+        <Head>Sign Out</Head>
+        <p>jwt: {props.jwt}</p>
+        <Button onClick={handleLogout} >Logout</Button>
+    </InnerWrapper>
+  )
+
+	return (
+		<Wrapper>
+			<Container>
+        {
+          props.jwt ? getLogoutBox() : getLoginBox()
+        }
+				
+			</Container>
+		</Wrapper>
+	)
 }
 
+
 const mapStoreToProps = store => {
-  return {
-    jwt: store.jwt,
-    loginError: store.loginError
-  }
+	return {
+		jwt: store.jwt,
+	}
 }
 
 const mapActionToProps = {
-  login: onLogin
+  login: onLogin,
+  logout: onLogout,
+  setJwt: onJwtReceived
 }
 
 export default connect(mapStoreToProps, mapActionToProps)(LoginModal)
