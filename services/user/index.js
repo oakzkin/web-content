@@ -53,12 +53,23 @@ app.post("/auth", (req, res) => {
     if (pw.compare(password, result.password)) {
       const token = jwt.sign(
         {
-          username: result.username
+          username: result.username,
+          email: result.email,
+          alias: result.alias,
+          avatar: result.avatar
         },
         jwtSecret,
         { expiresIn: "2h" }
       );
-      return res.json({ token: token });
+      return res.json({ 
+        token: token,
+        info: {
+          username: result.username,
+          email: result.email,
+          alias: result.alias,
+          avatar: result.avatar
+        }
+      });
     }
 
     return res.json({ message: "Invalid Username", err: "INVALID_PASSWORD" });
@@ -101,17 +112,44 @@ app.post("/u/:id", (req, res) => {
 
 app.post("/u", (req, res) => {
   const username = req.body.username;
+  const email = req.body.email;
+  const alias = req.body.alias || '';
+  const avatar = req.body.avatar || '';
   const password = pw.hash(req.body.password);
   const accountCollection = db.collection("account");
 
-  console.log("username", username);
+  if(!username) {
+    return res.json({
+      status: false,
+      message: "username is require"
+    })
+  }
+
+  if(!email) {
+    return res.json({
+      status: false,
+      message: "email is require"
+    })
+  }
+
+  
+  const document = {
+    username: username,
+    password: password,
+    email: email,
+    alias: alias,
+    avatar: avatar
+  };
 
   accountCollection.findOne(
     {
-      username: username
+      $or : [
+        {username: username}, 
+        {email: email}
+      ]
     },
-    (err, document) => {
-      if (document) {
+    (err, d) => {
+      if (d) {
         return res.json({
           status: false,
           message: "User Already Exists"
@@ -119,10 +157,7 @@ app.post("/u", (req, res) => {
       }
 
       accountCollection.insertOne(
-        {
-          username: username,
-          password: password
-        },
+        document,
         (err, result) => {
           if (err !== null) {
             return res.json({

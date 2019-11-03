@@ -1,0 +1,21 @@
+POST http://localhost:3000/u
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin",
+  "email": "admin@example.com",
+  "alias": "admin test",
+  "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQfwU0vTHvHnif1VMaRKZPV3aqHQfElgYSanFT0pOeAM-3Gh97J"
+}
+
+
+####
+
+POST http://localhost:3000/auth
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
