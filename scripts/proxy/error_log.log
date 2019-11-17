@@ -1,0 +1,2 @@
+2019/11/17 05:49:36 [error] 7#7: *5 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 172.22.0.1, server: www.webcontent.local, request: "GET / HTTP/1.1", upstream: "http://172.22.0.3:3000/", host: "www.webcontent.local"
+2019/11/17 06:07:47 [error] 6#6: *2 upstream timed out (110: Operation timed out) while reading response header from upstream, client: 172.22.0.1, server: www.webcontent.local, request: "GET / HTTP/1.1", upstream: "http://172.22.0.2:3000/", host: "www.webcontent.local"
