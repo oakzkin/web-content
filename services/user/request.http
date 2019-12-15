@@ -1,9 +1,9 @@
-POST http://localhost:3000/u
+POST http://api-user.webcontent.local:80/u
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin",
+  "username": "admin01",
+  "password": "admin01",
   "email": "admin@example.com",
   "alias": "admin test",
   "avatar": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQfwU0vTHvHnif1VMaRKZPV3aqHQfElgYSanFT0pOeAM-3Gh97J"
@@ -12,10 +12,10 @@ Content-Type: application/json
 
 ####
 
-POST http://localhost:3000/auth
+POST http://api-user.webcontent.local:80/auth
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin"
+  "username": "cccc",
+  "password": "cccc"
 }

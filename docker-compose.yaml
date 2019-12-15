@@ -10,7 +10,7 @@ services:
     depends_on:
       - user
       - article
-      - web_dashboard
+      - web_content
   user:
     image: node:10.15.3-alpine
     volumes:
@@ -73,10 +73,10 @@ services:
   #   #    npm install yarn -g
   #   #    yarn install
   #   #    yarn dev            
-  web_dashboard: 
+  web_content: 
     image: node:10.15.3-alpine
     volumes:
-      - ./services/web-dashboard/:/app
+      - ./services/web-content/:/app
     working_dir: /app
     environment:
       - PORT=3000
