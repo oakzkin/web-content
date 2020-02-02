@@ -41,7 +41,7 @@ function getRouter(db) {
         tags,
         content: content,
         user: req.user,
-        creatAt: new Date(),
+        createAt: new Date(),
         updateAt: new Date()
       })
       .then(result => {
