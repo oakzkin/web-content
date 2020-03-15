@@ -9,7 +9,7 @@ const Container = styled.div`
 
 
 const Layout = (props) => (
-  <Container>{props.children}</Container>
+  <Container className={props.className}>{props.children}</Container>
 )
 
 export default Layout
